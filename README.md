@@ -1,3 +1,3 @@
 ## Overview
 
-This is the dev repository contains the working in progress
+This is the main repository contains the code
