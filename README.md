@@ -1,3 +1,3 @@
 ## Overview
 
-This is the main repository contains the update code version
+This is the dev repository contains the update code version
