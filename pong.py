@@ -9,6 +9,7 @@
 # python3 -m pip install pygame
 
 import pygame, random, sys
+from pexpect.screen import screen
 from pygame.locals import *
 
 pygame.init()
@@ -35,6 +36,12 @@ paddle2_vel = 0
 l_score = 0
 r_score = 0
 
+myfont1 = pygame.font.SysFont("Comic Sans MS", 20)
+MENU = 'menu'
+GAME = 'game'
+PLAY = 'play'
+COMMAND_LIST  = 'command list'
+menu_items = {}
 # canvas declaration
 window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('Hello World')
@@ -66,6 +73,40 @@ def init():
         ball_init(True)
     else:
         ball_init(False)
+
+
+def draw_text(text, font, text_color, x_pos, y_pos ,canvas):
+    img = font.render(text, True, text_color)
+    rect = img.get_rect()  # get rect FIRST
+    rect.center = (x_pos, y_pos)  # then center it
+    canvas.blit(img, rect)
+    return  rect
+def draw_menu(canvas):
+    canvas.fill(BLACK)
+    menu_items ['START'] = draw_text("START GAME",myfont1, WHITE,300,200,  canvas  )
+    menu_items ['COMMAND'] =  draw_text("COMMANDS",myfont1, WHITE,300,250,  canvas  )
+    return menu_items
+
+
+def draw_command(canvas, ):
+    canvas.fill(BLACK)
+    player_one = 'PLAYER ONE'
+    draw_text(player_one, myfont1, WHITE, 300, 50, canvas)
+    move_up = 'up: up'
+    draw_text(move_up, myfont1, WHITE, 300, 100, canvas)
+    move_down = 'down: down'
+    draw_text(move_down, myfont1, WHITE, 300, 150, canvas)
+
+    player_two = 'PLAYER TWO'
+    draw_text(player_two, myfont1, WHITE, 300, 200, canvas)
+    move_up = 'up: W'
+    draw_text(move_up, myfont1, WHITE, 300, 250, canvas)
+    move_down = 'down: S'
+    rectangle = draw_text(move_down, myfont1, WHITE, 300, 300, canvas)
+    back_main = 'COME BACK TO THE MAIN MENU'
+    menu_items ['COME BACK'] = draw_text(back_main, myfont1, WHITE, 300, 350, canvas)
+    return menu_items
+
 
 
 # draw function of canvas
@@ -169,20 +210,46 @@ def keyup(event):
 
 init()
 
+game_state = MENU
+start_rect = None
 # game loop
 while True:
 
-    draw(window)
-
     for event in pygame.event.get():
 
-        if event.type == KEYDOWN:
-            keydown(event)
-        elif event.type == KEYUP:
-            keyup(event)
-        elif event.type == QUIT:
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
+
+        if game_state == MENU:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect["START"].collidepoint(event.pos):
+                    game_state = PLAY
+                if start_rect["COMMAND"].collidepoint(event.pos):
+                    game_state = COMMAND_LIST
+
+        elif game_state == COMMAND_LIST:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if start_rect["COME BACK"].collidepoint(event.pos):
+                    game_state = MENU
+
+        elif game_state == PLAY:
+            if event.type == KEYDOWN:
+                keydown(event)
+            elif event.type == KEYUP:
+                keyup(event)
+
+    # --------------------
+    # 2. DRAW
+    # --------------------
+    if game_state == MENU:
+        start_rect = draw_menu(window)
+
+    elif game_state == COMMAND_LIST:
+        start_rect = draw_command(window)
+
+    elif game_state == PLAY:
+        draw(window)
 
     pygame.display.update()
     fps.tick(60)
