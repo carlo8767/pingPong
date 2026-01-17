@@ -17,7 +17,7 @@ BLACK = (0, 0, 0)
 # globals
 WIDTH = 600
 HEIGHT = 400
-BALL_RADIUS = 20
+BALL_RADIUS = 10
 PAD_WIDTH = 8
 PAD_HEIGHT = 80
 HALF_PAD_WIDTH = PAD_WIDTH // 2
@@ -121,7 +121,7 @@ def draw(canvas):
 
     ball_pos[0] += int(ball_vel[0])
     ball_pos[1] += int(ball_vel[1])
-    pygame.draw.circle(canvas, RED, ball_pos, 20, 0)
+    pygame.draw.circle(canvas, RED, ball_pos, BALL_RADIUS, 0)
     pygame.draw.polygon(
         canvas,
         GREEN,
