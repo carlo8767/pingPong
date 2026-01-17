@@ -37,7 +37,7 @@ PLAY = "play"
 COMMAND_LIST = "command list"
 menu_items = {}
 window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
-pygame.display.set_caption("Hello World")
+pygame.display.set_caption("Super Pong 2026")
 
 
 def ball_init(right):
