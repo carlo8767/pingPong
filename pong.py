@@ -153,7 +153,7 @@ def draw(canvas):
     ball_pos[1] += int(ball_vel[1])
 
     # draw paddles and ball
-    pygame.draw.circle(canvas, RED, ball_pos, 20, 0)
+    pygame.draw.circle(canvas, RED, ball_pos, BALL_RADIUS, 0)
     pygame.draw.polygon(canvas, GREEN, [[paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT],
                                         [paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT],
                                         [paddle1_pos[0] + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT],
