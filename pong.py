@@ -49,7 +49,7 @@ COMMAND_LIST  = 'command list'
 SET_LEVEL = 'set level'
 GAME_OVER = 'game_over'
 EXIT_GAME = False
-WAIT_END = 4000
+WAIT_END = 10000
 menu_items = {}
 # canvas declaration
 window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
@@ -131,16 +131,16 @@ def draw_command(canvas):
     canvas.fill(BLACK)
     player_one = 'PLAYER ONE'
     draw_text(player_one, myfont1, WHITE, 300, 50, canvas)
-    move_up = 'up: up'
+    move_up = 'up: W'
     draw_text(move_up, myfont1, WHITE, 300, 100, canvas)
-    move_down = 'down: down'
+    move_down = 'down: S'
     draw_text(move_down, myfont1, WHITE, 300, 150, canvas)
 
     player_two = 'PLAYER TWO'
     draw_text(player_two, myfont1, WHITE, 300, 200, canvas)
-    move_up = 'up: W'
+    move_up = 'up: UP'
     draw_text(move_up, myfont1, WHITE, 300, 250, canvas)
-    move_down = 'down: S'
+    move_down = 'down: DOWN'
     rectangle = draw_text(move_down, myfont1, WHITE, 300, 300, canvas)
     back_main = 'COME BACK TO THE MAIN MENU'
     menu_items ['COME BACK'] = draw_text(back_main, myfont1, WHITE, 300, 350, canvas)
