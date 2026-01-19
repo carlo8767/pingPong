@@ -52,8 +52,8 @@ pygame.display.set_caption("Super Pong 2026")
 def ball_init(right):
     global ball_pos, ball_vel  # these are vectors stored as lists
     ball_pos = [WIDTH // 2, HEIGHT // 2]
-    horz = random.randrange(2, 4)
-    vert = random.randrange(1, 3)
+    horz = 2
+    vert = 2
 
     if right == False:
         horz = - horz
@@ -115,7 +115,7 @@ def draw_command(canvas, ):
 
 # draw function of canvas
 def draw(canvas):
-    global paddle1_pos, paddle2_pos, ball_pos, ball_vel, l_score, r_score,speed_increment
+    global paddle1_pos, paddle2_pos, ball_pos, ball_vel, l_score, r_score,speed_increment, game_state
 
     canvas.fill(BLACK)
     pygame.draw.line(canvas, WHITE, [WIDTH // 2, 0], [WIDTH // 2, HEIGHT], 1)
@@ -187,6 +187,11 @@ def draw(canvas):
     label2 = myfont2.render("Score " + str(r_score), 1, (255, 255, 0))
     canvas.blit(label2, (470, 20))
 
+    # check if score reaches 20, if so exit game, if not continue
+    if l_score == 10 or r_score == 10:
+        init()
+        game_state = MENU
+           
 
 # keydown handler
 def keydown(event):
