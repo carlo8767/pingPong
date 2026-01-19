@@ -19,6 +19,7 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
+ORANGE = (255,255,165)
 
 # globals
 WIDTH = 600
@@ -41,6 +42,7 @@ MENU = 'menu'
 GAME = 'game'
 PLAY = 'play'
 COMMAND_LIST  = 'command list'
+SET_LEVEL = 'set level'
 menu_items = {}
 # canvas declaration
 window = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
@@ -81,18 +83,16 @@ def draw_text(text, font, text_color, x_pos, y_pos ,canvas):
     rect.center = (x_pos, y_pos)  # then center it
     canvas.blit(img, rect)
     return  rect
+
 def draw_menu(canvas):
     canvas.fill(BLACK)
-    menu_items ['START'] = draw_text("START GAME",myfont1, WHITE,300,200,  canvas  )
-    menu_items ['COMMAND'] =  draw_text("COMMANDS",myfont1, WHITE,300,250,  canvas  )
-    draw_text("SELECT DIFFICULTY:", myfont1, RED, 300, 220, canvas)
-    menu_items["EASY"] = draw_text("EASY (5%)", myfont1, GREEN, 200, 270, canvas)
-    menu_items["MEDIUM"] = draw_text("MEDIUM (10%)", myfont1, GREEN, 300, 270, canvas)
-    menu_items["HARD"] = draw_text("HARD (20%)", myfont1, GREEN, 420, 270, canvas)
+    menu_items ['START'] = draw_text("START GAME",myfont1, WHITE,300,150,  canvas  )
+    menu_items ['COMMAND'] =  draw_text("COMMANDS",myfont1, WHITE,300,200,  canvas  )
+    menu_items ['SET LEVEL'] =  draw_text("SELECT LEVEL", myfont1, WHITE, 300, 250, canvas)
     return menu_items
 
-
 def draw_command(canvas, ):
+    menu_items = {}
     canvas.fill(BLACK)
     player_one = 'PLAYER ONE'
     draw_text(player_one, myfont1, WHITE, 300, 50, canvas)
@@ -112,6 +112,15 @@ def draw_command(canvas, ):
     return menu_items
 
 
+def draw_level(canvas):
+    canvas.fill(BLACK)
+    menu_items = {}
+    menu_items["EASY"] = draw_text("EASY (5%)", myfont1, GREEN, 300, 100, canvas)
+    menu_items["MEDIUM"] = draw_text("MEDIUM (10%)", myfont1, ORANGE, 300, 150, canvas)
+    menu_items["HARD"] = draw_text("HARD (20%)", myfont1, RED, 300, 200, canvas)
+    back_main = 'COME BACK TO THE MAIN MENU'
+    menu_items ['LEVEL COME BACK'] = draw_text(back_main, myfont1, WHITE, 300, 250, canvas)
+    return menu_items
 
 # draw function of canvas
 def draw(canvas):
@@ -143,7 +152,7 @@ def draw(canvas):
     ball_pos[1] += int(ball_vel[1])
 
     # draw paddles and ball
-    pygame.draw.circle(canvas, RED, ball_pos, 20, 0)
+    pygame.draw.circle(canvas, RED, ball_pos, BALL_RADIUS, 0)
     pygame.draw.polygon(canvas, GREEN, [[paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] - HALF_PAD_HEIGHT],
                                         [paddle1_pos[0] - HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT],
                                         [paddle1_pos[0] + HALF_PAD_WIDTH, paddle1_pos[1] + HALF_PAD_HEIGHT],
@@ -224,8 +233,6 @@ start_rect = None
 # game loop
 while True:
 
-    draw(window)
-
     for event in pygame.event.get():
 
         if event.type == KEYDOWN:
@@ -242,29 +249,39 @@ while True:
                     game_state = PLAY
                 if start_rect["COMMAND"].collidepoint(event.pos):
                     game_state = COMMAND_LIST
-                elif start_rect["EASY"].collidepoint(event.pos):
-                    speed_increment = 1.05
-                    game_state = PLAY
-                elif start_rect["MEDIUM"].collidepoint(event.pos):
-                    speed_increment = 1.10
-                    game_state = PLAY
-                elif start_rect["HARD"].collidepoint(event.pos):
-                    speed_increment = 1.20
-                    game_state = PLAY
+                if start_rect['SET LEVEL'].collidepoint(event.pos):
+                    game_state = SET_LEVEL
+         
 
         elif game_state == COMMAND_LIST:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_rect["COME BACK"].collidepoint(event.pos):
                     game_state = MENU
 
+        elif game_state == SET_LEVEL:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if  start_rect["EASY"].collidepoint(event.pos):
+                    speed_increment = 1.05
+                    
+                elif start_rect["MEDIUM"].collidepoint(event.pos):
+                    speed_increment = 1.10
+                 
+                elif start_rect["HARD"].collidepoint(event.pos):
+                    speed_increment = 1.20
+        
+                elif start_rect["LEVEL COME BACK"].collidepoint(event.pos):
+                     game_state = MENU
+
+        
         elif game_state == PLAY:
             if event.type == KEYDOWN:
                 keydown(event)
             elif event.type == KEYUP:
                 keyup(event)
+        
 
     # --------------------
-    # 2. DRAW
+    # 1. DRAW
     # --------------------
     if game_state == MENU:
         start_rect = draw_menu(window)
@@ -272,8 +289,11 @@ while True:
     elif game_state == COMMAND_LIST:
         start_rect = draw_command(window)
 
+    elif game_state == SET_LEVEL:
+        start_rect = draw_level(window)
+
     elif game_state == PLAY:
         draw(window)
 
     pygame.display.update()
-    fps.tick(60)
+    fps.tick(90)
