@@ -9,7 +9,6 @@
 # python3 -m pip install pygame
 
 import pygame, random, sys
-
 from pygame.locals import *
 
 pygame.init()
